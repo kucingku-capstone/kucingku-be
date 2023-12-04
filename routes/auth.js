@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router()
 const {
     loginHandler,
@@ -9,6 +9,6 @@ const {
 
 router.get('/login', loginHandler )
 
-router.get('/register', registerHandler )
+router.post('/register', registerHandler )
 
 module.exports = router
