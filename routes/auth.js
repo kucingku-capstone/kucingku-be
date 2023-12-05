@@ -7,8 +7,8 @@ const {
 
 // all auth routes here
 
-router.get('/login', loginHandler )
+router.post('/api/login', loginHandler )
 
-router.post('/register', registerHandler )
+router.post('/api/register', registerHandler )
 
 module.exports = router

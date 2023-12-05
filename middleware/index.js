@@ -5,13 +5,20 @@ require("dotenv").config();
 const secretKey = process.env.KUCINGKU_JWT_SECRET;
 
 const authMiddleware = (req, res, next) => {
-  const token = req.header.authorization;
+  const token = req.header('Authorization');
 
-  if (!token) {
-    return res.status(401).json({ message: Unauthorized });
-  }
+  if (!token) return res.status(401).json({ message: 'Unauthorized Token' });
 
-  jwt.verify(token, secretKey, (err, decoded) => {
+  const authSplit = token.split(' ');
+
+  const [authType, authToken] =[
+    authSplit[0],
+    authSplit[1]
+  ]
+
+  if(authType !== 'Bearer') return res.status(401).json({ message: 'Unauthorized Auth Type' });
+
+  jwt.verify(authToken, secretKey, (err, decoded) => {
     if(err){
         return res.status(401).json({ message: 'invalid token' });
     }
@@ -21,4 +28,4 @@ const authMiddleware = (req, res, next) => {
   });
 };
 
-module.exports = secretKey;
+module.exports = authMiddleware;
