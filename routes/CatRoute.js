@@ -5,7 +5,7 @@ import {
     saveCat,
     updateCat,
     deleteCat
-} from "../handler/CatController.js";
+} from "../handler/CatHandler.js";
 
 const router = express.Router();
 
