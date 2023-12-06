@@ -17,3 +17,13 @@ process.on('unhandledRejection', (err) => {
     console.log(err);
     process.exit();
 })
+
+// Cat Shelters CRUD
+import FileUpload from "express-fileupload";
+import cors from "cors";
+import CatRoute from "./routes/CatRoute.js";
+
+app.use(cors());
+app.use(FileUpload());
+app.use(express.static("public"));
+app.use(CatRoute);
