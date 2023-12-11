@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 import FileUpload from "express-fileupload";
 import cors from "cors";
 import CatRoute from "./routes/CatRoute.js";
+import UserInterestRoute from "./routes/userInterestRoute.js";
 
 const port = process.env.PORT || 3000;
 
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(FileUpload());
 app.use(express.static("public"));
-app.use(authRoute, indexRoute, CatRoute);
+app.use(authRoute, indexRoute, CatRoute, UserInterestRoute);
 
 app.listen(port, (req, res) => {
     console.log(`listen to port: ${port}`);
