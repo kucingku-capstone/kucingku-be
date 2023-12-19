@@ -1,27 +1,19 @@
-import {Sequelize} from "sequelize";
+import mongoose from 'mongoose';
 
-require('dotenv').config();
-
-const db = new Sequelize('kucingku_db', process.env.KUCINGKU_USER, process.env.KUCINGKU_PASSWORD,{
-    host: process.env.KUCINGKU_HOST,
-    dialect: "mysql"
+mongoose.connect('env.config', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,   
 });
 
-const {DataTypes} = Sequelize;
-
-const UserInterest = db.define('UserInterest',{
-    cat_Breeds: DataTypes.STRING,
-    cat_Activity: DataTypes.STRING,
-    cat_Color: DataTypes.STRING,
-    cat_Fur: DataTypes.STRING,
-    cat_FurTexture: DataTypes.STRING,
-    cat_UndercoatPattern: DataTypes.STRING
-},{
-    freezeTableName: true
+const userInterestSchema = new mongoose.Schema({
+    cat_Breeds: String,
+    cat_Activity: String,
+    cat_Color: String,
+    cat_Fur: String,
+    cat_FurTexture: String,
+    cat_UndercoatPattern: String,
 });
+
+const UserInterest = mongoose.model('UserInterest', userInterestSchema);
 
 export default UserInterest;
-
-(async()=>{
-    await db.sync();
-})();
