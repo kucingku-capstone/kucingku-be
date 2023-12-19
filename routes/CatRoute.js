@@ -1,13 +1,17 @@
-import express from 'express';
+import express from "express";
 import {
     getCat,
     getCatById,
     saveCat,
     updateCat,
     deleteCat
-} from '../handler/CatHandler.js';
+} from "../handler/CatHandler.js";
+const authMiddleware = require('../middleware/index.js')
 
 const router = express.Router();
+
+//auth middlerware, only login user can access route below
+router.use(authMiddleware);
 
 router.get('/Cat', getCat);
 router.get('/Cat/:id', getCatById);
