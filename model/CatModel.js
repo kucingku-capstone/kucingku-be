@@ -1,30 +1,22 @@
-import {Sequelize} from "sequelize";
+import mongoose from 'mongoose';
 
-require('dotenv').config();
-
-const db = new Sequelize('kucingku_db', process.env.KUCINGKU_USER, process.env.KUCINGKU_PASSWORD,{
-    host: process.env.KUCINGKU_HOST,
-    dialect: "mysql"
+mongoose.connect('env.config', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,   
 });
 
-const {DataTypes} = Sequelize;
-
-const Cat = db.define('ShelterCat',{
-    name: DataTypes.STRING,
-    age: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    size: DataTypes.STRING,
-    coat: DataTypes.STRING,
-    breed: DataTypes.STRING,
-    description: DataTypes.STRING,
-    image: DataTypes.STRING,
-    url: DataTypes.STRING,
-},{
-    freezeTableName: true
+const catSchema = new mongoose.Schema({
+    name: String,
+    age: String,
+    gender: String,
+    size: String,
+    coat: String,
+    breed: String,
+    description: String,
+    image: String,
+    url: String,
 });
+
+const Cat = mongoose.model('ShelterCat', catSchema);
 
 export default Cat;
-
-(async()=>{
-    await db.sync();
-})();
