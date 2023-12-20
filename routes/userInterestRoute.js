@@ -1,17 +1,13 @@
-import express from "express";
+import express from 'express';
 import {
     getUserInterest,
     getUserInterestById,
     saveUserInterest,
     updateUserInterest,
     deleteUserInterest
-} from "../handler/userInterestHandler.js";
-const authMiddleware = require('../middleware/index.js')
+} from '../handler/userInterestHandler.js';
 
 const router = express.Router();
-
-//auth middlerware, only login user can access route below
-router.use(authMiddleware);
 
 router.get('/UserInterest', getUserInterest);
 router.get('/UserInterest/:id', getUserInterestById);
