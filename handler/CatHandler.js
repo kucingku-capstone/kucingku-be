@@ -1,10 +1,11 @@
 import Cat from '../model/CatModel.js';
 import path from 'path';
-import fs from 'fs/promises';
+import fs from 'fs';
 
 export const getCat = async (req, res) => {
     try {
-        const response = await Cat.find();
+        const snapshot = await Cat.get();
+        const response = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         res.json(response);
     } catch (error) {
         console.log(error.message);
@@ -14,8 +15,11 @@ export const getCat = async (req, res) => {
 
 export const getCatById = async (req, res) => {
     try {
-        const response = await Cat.findOne({ _id: req.params.id });
-        res.json(response);
+        const doc = await Cat.doc(req.params.id).get();
+        if (!doc.exists) {
+            return res.status(404).json({ msg: 'No Data Found' });
+        }
+        res.json({ id: doc.id, ...doc.data() });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -51,7 +55,7 @@ export const saveCat = async (req, res) => {
                 return res.status(500).json({ msg: 'Error uploading file' });
             }
 
-            await Cat.create({
+            await Cat.add({
                 name,
                 age,
                 gender,
@@ -71,98 +75,72 @@ export const saveCat = async (req, res) => {
     }
 }
 
-
 export const updateCat = async (req, res) => {
     try {
-        const cat = await Cat.findById(req.params.id);
+        const catSnapshot = await Cat.doc(req.params.id).get();
 
-        if (!cat) {
+        if (!catSnapshot.exists) {
             return res.status(404).json({ msg: 'No Data Found' });
         }
 
-        let fileName = cat.image;
+        const catData = catSnapshot.data();
+        let fileName = catData.image;
 
         if (req.files && req.files.image) {
             const file = req.files.image;
-            const fileSize = file.size;
             const ext = path.extname(file.name);
             fileName = `${file.md5}${ext}`;
-            const allowedTypes = ['.png', '.jpg', '.jpeg'];
 
-            if (!allowedTypes.includes(ext.toLowerCase())) {
-                return res.status(422).json({ msg: 'Invalid Image Type' });
-            }
-
-            if (fileSize > 5000000) {
-                return res.status(422).json({ msg: 'Image must be less than 5 MB' });
-            }
-
-            const oldImagePath = `./public/images/${cat.image}`;
-            await fs.unlink(oldImagePath);
-
-            const newImagePath = `./public/images/${fileName}`;
-            await fs.writeFile(newImagePath, file.data);
-
-            // Update the database with the new image information
-            await Cat.findByIdAndUpdate(
-                req.params.id,
-                {
-                    name: req.body.name || cat.name,
-                    age: req.body.age || cat.age,
-                    gender: req.body.gender || cat.gender,
-                    size: req.body.size || cat.size,
-                    coat: req.body.coat || cat.coat,
-                    breed: req.body.breed || cat.breed,
-                    image: fileName,
-                    description: req.body.description || cat.description,
-                    url: `${req.protocol}://${req.get('host')}/images/${fileName}`,
+            const oldImagePath = `./public/images/${catData.image}`;
+            try {
+                await fs.promises.stat(oldImagePath);
+                await fs.promises.unlink(oldImagePath);
+            } catch (error) {
+                if (error.code === 'ENOENT') {
+                    console.log("File does not exist:", oldImagePath);
+                } else {
+                    throw error;  // rethrow any other errors
                 }
-            );
-
-            res.status(200).json({ msg: 'Cat Updated Successfully' });
-        } else {
-            // Update other fields in the database even if no new image is provided
-            await Cat.findByIdAndUpdate(
-                req.params.id,
-                {
-                    name: req.body.name || cat.name,
-                    age: req.body.age || cat.age,
-                    gender: req.body.gender || cat.gender,
-                    size: req.body.size || cat.size,
-                    coat: req.body.coat || cat.coat,
-                    breed: req.body.breed || cat.breed,
-                    description: req.body.description || cat.description,
-                }
-            );
-
-            res.status(200).json({ msg: 'Cat Updated Successfully' });
+            }
+            
+            const imagePath = `./public/images/${fileName}`;
+            await file.mv(imagePath);
         }
+
+        await Cat.doc(req.params.id).update({
+            name: req.body.name || catData.name,
+            age: req.body.age || catData.age,
+            gender: req.body.gender || catData.gender,
+            size: req.body.size || catData.size,
+            coat: req.body.coat || catData.coat,
+            breed: req.body.breed || catData.breed,
+            description: req.body.description || catData.description,
+            image: fileName,
+            url: `${req.protocol}://${req.get('host')}/images/${fileName}`,
+        });
+
+        res.status(200).json({ msg: 'Cat Updated Successfully' });
+
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
-
 export const deleteCat = async (req, res) => {
-    const cat = await Cat.findById(req.params.id);
-
-    if (!cat) return res.status(404).json({ msg: "No Data Found" });
-
     try {
-        const filepath = `./public/images/${cat.image}`;
+        const catRef = Cat.doc(req.params.id);
+        const doc = await catRef.get();
 
-        // Check if the file exists before attempting to delete
-        if (fs.existsSync(filepath)) {
-            fs.unlinkSync(filepath);
-        } else {
-            console.log("File does not exist:", filepath);
+        if (!doc.exists) {
+            return res.status(404).json({ msg: 'No Data Found' });
         }
 
-        await Cat.deleteOne({ _id: req.params.id });
-        res.status(200).json({ msg: "Cat Deleted Successfully" });
+        await catRef.delete();
+
+        res.status(200).json({ msg: 'Cat Deleted Successfully' });
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
