@@ -1,19 +1,5 @@
-import mongoose from 'mongoose';
+import firestore from '../utils/db.js';
 
-mongoose.connect('env.config', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,   
-});
+const userInterestCollection = firestore.collection('userInterests');
 
-const userInterestSchema = new mongoose.Schema({
-    cat_Breeds: String,
-    cat_Activity: String,
-    cat_Color: String,
-    cat_Fur: String,
-    cat_FurTexture: String,
-    cat_UndercoatPattern: String,
-});
-
-const UserInterest = mongoose.model('UserInterest', userInterestSchema);
-
-export default UserInterest;
+export default userInterestCollection;
