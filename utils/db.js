@@ -1,20 +1,16 @@
-const mysql = require('mysql');
-require('dotenv').config();
+import { Firestore } from '@google-cloud/firestore';
 
-const connection = mysql.createConnection({
-    host: process.env.KUCINGKU_HOST,
-    user: process.env.KUCINGKU_USER,
-    password: process.env.KUCINGKU_PASSWORD,
-    database: 'kucingku_db'
+const firestore = new Firestore({
+    projectId: '...',  //Fill Project Id from Firestore
+    keyFilename: "..."  //Fill path/to/the/serviceAccountKey.json
 });
 
+var admin = require("firebase-admin");
 
-connection.connect((err) => {
-    if(err){
-        console.error('Error connecting to CLoud SQL:', err);
-        return;
-    }
-    console.log('Connected to Cloud SQL');
+var serviceAccount = require("...");  //Fill path/to/the/serviceAccountKey.json
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
 });
 
-module.exports = connection;
+export default firestore;
