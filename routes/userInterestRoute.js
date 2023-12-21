@@ -15,6 +15,6 @@ router.get('/UserInterest/:id', getUserInterestById);
 router.post('/UserInterest', saveUserInterest);
 router.patch('/UserInterest/:id', updateUserInterest);
 router.delete('/UserInterest/:id', deleteUserInterest);
-router.post('/UserInterestRecommend', processDataHandler);]
+router.post('/UserInterestRecommend', processDataHandler);
 
 export default router;

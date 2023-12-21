@@ -1,4 +1,5 @@
 import userInterestCollection from '../model/userInterestModel.js';
+import firebaseAdmin from 'firebase-admin'
 
 export const getUserInterest = async (req, res) => {
     try {
@@ -29,10 +30,16 @@ export const getUserInterestById = async (req, res) => {
 
 export const saveUserInterest = async (req, res) => {
     try {
+
+        const decodedToken = await firebaseAdmin.auth().verifyIdToken(token);
+
+        const uid = decodedToken.uid;
+        const email = decodedToken.email;
+
         const { user_gender, user_age, cat_age, cat_gender, cat_size, cat_breed } = req.body;
 
         await userInterestCollection.add({
-            user_gender, user_age, cat_age, cat_gender, cat_size, cat_breed
+            uid, email, user_gender, user_age, cat_age, cat_gender, cat_size, cat_breed
         });
 
         res.status(201).json({ msg: 'UserInterest Created Successfully' });
@@ -78,16 +85,30 @@ export const deleteUserInterest = async (req, res) => {
 
 const axios = require('axios');
 
+// Authentication middleware 
+const requireAuth = (req, res, next) => {
+    try {
+      const token = req.headers['authorization'];
+      const decodedToken = firebaseAdmin.auth().verifyIdToken(token);
+      const uid = decodedToken.uid;
+      req.user = { uid }; // Attach user information to the request object
+      next();
+    } catch (error) {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+  };
+
 export const processDataHandler = async (req, res) => {
     try {
         const { documentId } = req.body; // Assuming you're sending documentId in the POST body
+        const uid = req.user.uid;
 
-        if (!documentId) {
+        if (!documentId || !uid) {
             return res.status(400).json({ message: 'Document ID is required in the request body' });
         }
 
         // Fetch data from Firestore based on the provided document ID
-        const specificDataFromFirestore = await getSpecificDataFromFirestore(documentId);
+        const specificDataFromFirestore = await getSpecificDataFromFirestore(documentId, uid);
 
         if (!specificDataFromFirestore) {
             return res.status(404).json({ message: 'Specific data not found in Firestore for the provided ID' });
