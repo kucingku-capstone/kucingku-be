@@ -32,7 +32,7 @@ export const saveCat = async (req, res) => {
             return res.status(400).json({ msg: 'No File Uploaded' });
         }
 
-        const { name, age, gender, size, coat, breed, description } = req.body;
+        const { cat_name, cat_age, cat_gender, cat_size, cat_breed } = req.body;
         const file = req.files.image;
         const allowedTypes = ['.png', '.jpg', '.jpeg'];
 
@@ -56,13 +56,11 @@ export const saveCat = async (req, res) => {
             }
 
             await Cat.add({
-                name,
-                age,
-                gender,
-                size,
-                coat,
-                breed,
-                description,
+                cat_name,
+                cat_age, 
+                cat_gender, 
+                cat_size, 
+                cat_breed,
                 image: fileName,
                 url,
             });
@@ -108,13 +106,11 @@ export const updateCat = async (req, res) => {
         }
 
         await Cat.doc(req.params.id).update({
-            name: req.body.name || catData.name,
-            age: req.body.age || catData.age,
-            gender: req.body.gender || catData.gender,
-            size: req.body.size || catData.size,
-            coat: req.body.coat || catData.coat,
-            breed: req.body.breed || catData.breed,
-            description: req.body.description || catData.description,
+            cat_name: req.body.cat_name || catData.cat_name,
+            cat_age: req.body.cat_age || catData.cat_age,
+            cat_gender: req.body.cat_gender || catData.cat_gender,
+            cat_size: req.body.cat_size || catData.cat_size,
+            cat_breed: req.body.cat_breed || catData.cat_breed,
             image: fileName,
             url: `${req.protocol}://${req.get('host')}/images/${fileName}`,
         });
