@@ -1,7 +1,6 @@
-# KucingKu-Bangkit-Cloud-Computing-Team
+# Journey-API
+Journey RestAPI
 
-This is Repository for KucingKu APP Backend,
-This Contains what Cloud Computing's Team Do
 
 
 # How To Use
@@ -19,29 +18,15 @@ This Contains what Cloud Computing's Team Do
     Response:
     ```json
     {
-      "shelterCats": [
+      "userInterest": [
             {
                 "id": "kCKQAHrzUHfQ6tBI5HdT",
-                "cat_Breeds": [
-                    "Persian",
-                    "Coon",
-                    "Siamese"
-                    ],
-                "cat_Activity": [
-                    "Playful",
-                    "Communication"
-                    ],
-                "cat_Color": [
-                    "Brown",
-                    "Orange",
-                    "Grey"
-                    ],
-                "cat_Fur": [
-                    "Short",
-                    "Long"
-                    ],
-                "cat_FurTexture": "Smooth & Soft",
-                "cat_UndercoatPattern": "Color Combination"
+                "user_gender": "male",
+                "user_age": "16",
+                "cat_age" : "adult",
+                "cat_gender" : "male",
+                "cat_size" : "large",
+                "cat_breed" : "local"
             },
         ]
     }
@@ -54,23 +39,13 @@ This Contains what Cloud Computing's Team Do
     Response:
     ```json
     {
-        "id": "tBI5HdTkCKQAHrzUHfQ6",
-        "cat_Breeds": [
-            "Maine",
-            "British Shorthair"
-            ],
-        "cat_Activity": [
-            "Hunting",
-            "Sleeping"
-            ],
-        "cat_Color": [
-            "White",
-            "Black",
-            "Cream"
-            ],
-        "cat_Fur": "Medium",
-        "cat_FurTexture": "Coarse or Curly",
-        "cat_UndercoatPattern": "One Color without a Specific Pattern"
+        "id": "kCKQAHrzUHfQ6tBI5HdT",
+        "user_gender": "female",
+        "user_age": "23",
+        "cat_age" : "young",
+        "cat_gender" : "female",
+        "cat_size" : "medium",
+        "cat_breed" : "siamese"
     }
     ```
 
@@ -79,12 +54,12 @@ This Contains what Cloud Computing's Team Do
     Request: 
     ```json
     {
-        "cat_Breeds": ["Persian", "Coon", "Siamese"],
-        "cat_Activity": ["Playful", "Communication"],
-        "cat_Color": ["Brown", "Orange", "Grey"],
-        "cat_Fur": ["Short", "Long"],
-        "cat_FurTexture": "Smooth & Soft",
-        "cat_UndercoatPattern": "Color Combination"
+        "user_gender": "string",
+        "user_age": "string",
+        "cat_age" : "string" or ["array"],
+        "cat_gender" : "string" or ["array"],
+        "cat_size" : "string" or ["array"],
+        "cat_breed" : "string" or ["array"]
     }
     ```
     Response:
@@ -101,12 +76,12 @@ This Contains what Cloud Computing's Team Do
     Request:
     ```json
     {
-        "cat_Breeds": "string" or ["array"],
-        "cat_Activity": "string" or ["array"],
-        "cat_Color": "string" or ["array"],
-        "cat_Fur": "string" or ["array"],
-        "cat_FurTexture": "string" or ["array"],
-        "cat_UndercoatPattern": "string" or ["array"]
+        "user_gender": "string",
+        "user_age": "string",
+        "cat_age" : "string" or ["array"],
+        "cat_gender" : "string" or ["array"],
+        "cat_size" : "string" or ["array"],
+        "cat_breed" : "string" or ["array"]
     }
     ```
     Response:
@@ -127,6 +102,7 @@ This Contains what Cloud Computing's Team Do
     }
     ```
 
+
 ---
 * ### Shelter Cats ###
   URL Shelter Cat Route: `http://127.0.0.1:3000/Cat/`
@@ -142,16 +118,14 @@ This Contains what Cloud Computing's Team Do
     {
       "shelterCats": [
             {
-                "id": "ONSP4lW618g0runtgU5E",
-                "name": "Kitty",
-                "age": "Baby",
-                "gender": "Female",
-                "size": "Small",
-                "coat": "Short",
-                "breed": "Persian",
-                "description": "Kitty is a heartwarming feline that captures hearts with her affection.",
-                "image": "2a40c80f5cdd787266b94e999ba82f9c.jpg",
-                "url": "http://127.0.0.1:3000/images/2a40c80f5cdd787266b94e999ba82f9c.jpg"
+                "id": "NqrqA63U7r3D5ricyh5O",
+                "cat_name": "Kitty",
+                "cat_age": "Baby",
+                "cat_gender": "Female",
+                "cat_size": "Small",
+                "cat_breed": "Persian",
+                "image": "ac6289f89a4aa124c7f4e35b032cce84.jpg",
+                "url": "http://127.0.0.1:3000/images/ac6289f89a4aa124c7f4e35b032cce84.jpg"
             },
         ]
     }
@@ -168,16 +142,14 @@ This Contains what Cloud Computing's Team Do
     Response:
     ```json
     {
-        "id": "U5EONSP4lW618g0runtg",
-        "name": "Kitty",
-        "age": "Baby",
-        "gender": "Female",
-        "size": "Small",
-        "coat": "Short",
-        "breed": "Persian",
-        "description": "Kitty is a heartwarming feline that captures hearts with her affection.",
-        "image": "2a40c80f5cdd787266b94e999ba82f9c.jpg",
-        "url": "http://127.0.0.1:3000/images/2a40c80f5cdd787266b94e999ba82f9c.jpg"
+        "id": "3D5ricyh5ONqrqA63U7r",
+        "cat_name": "Abuy",
+        "cat_age": "Adult",
+        "cat_gender": "Male",
+        "cat_size": "Large",
+        "cat_breed": "Local",
+        "image": "ac6289f89a4aa124c7f4e35b032cce84.jpg",
+        "url": "http://127.0.0.1:3000/images/ac6289f89a4aa124c7f4e35b032cce84.jpg"
     }
     ```
 
@@ -186,13 +158,11 @@ This Contains what Cloud Computing's Team Do
     Request: 
     ```json
     {
-        "name": "string",
-        "age": "string",
-        "gender": "string",
-        "size": "string",
-        "coat": "string",
-        "breed": "string",
-        "description": "string",
+        "cat_name": "string",
+        "cat_age": "string",
+        "cat_gender": "string",
+        "cat_size": "string",
+        "cat_breed": "string",
         "image": "file",
     }
     ```
@@ -210,14 +180,12 @@ This Contains what Cloud Computing's Team Do
     Request:
     ```json
     {
-        "name": "string",
-        "age": "string",
-        "gender": "string",
-        "size": "string",
-        "coat": "string",
-        "breed": "string",
-        "description": "string",
-        "image": "file" //Optional
+        "cat_name": "string",
+        "cat_age": "string",
+        "cat_gender": "string",
+        "cat_size": "string",
+        "cat_breed": "string",
+        "image": "file", //Optional
     }
     ```
     Response:
@@ -244,7 +212,34 @@ This Contains what Cloud Computing's Team Do
     ```
 
 
+---
+* ### Get Cat Recommendation ###
+  URL Cat Recommendation Route: `http://127.0.0.1:3000/UserInterestRecommend/`
+
+* **[POST]** Send User Interest Data 
+
+    Request: 
+    ```json
+    {
+        "documentId": "aGRboE9bkU0gVOvODhmE"
+    }
+    ```
+    Response:
+    ```json
+    {
+        "Recommended Cat IDs":
+        [
+            0,
+            13,
+            04,
+            03,
+            24,
+            09
+        ]
+    }
+    ```
+
+
 ### Cloud Computing Member:
 - Ade Rizal Pambudi
 - Akbar Ihsanul Ahadin
-
